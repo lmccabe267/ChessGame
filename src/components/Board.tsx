@@ -3,12 +3,55 @@ import Piece from './Piece';
 import type { Position } from '../logic/moveset';
 
 const squareSize = 'w-[100px] h-[100px]';
+type PieceType = 'pawn' | 'rook' | 'bishop' | 'knight' | 'king' | 'queen';
+type PieceData = {
+	pieceType: PieceType;
+	color: 'black' | 'white';
+	position: Position;
+};
 
 function Board() {
 	const [activePosition, setActivePosition] = useState<Position | null>(null);
+	const [pieces, setPieces] = useState<PieceData[]>([
+		// White pieces
+		{ pieceType: 'rook', color: 'white', position: [0, 0] },
+		{ pieceType: 'knight', color: 'white', position: [0, 1] },
+		{ pieceType: 'bishop', color: 'white', position: [0, 2] },
+		{ pieceType: 'queen', color: 'white', position: [0, 3] },
+		{ pieceType: 'king', color: 'white', position: [0, 4] },
+		{ pieceType: 'bishop', color: 'white', position: [0, 5] },
+		{ pieceType: 'knight', color: 'white', position: [0, 6] },
+		{ pieceType: 'rook', color: 'white', position: [0, 7] },
+		...Array.from(
+			{ length: 8 },
+			(_, i): PieceData => ({
+				pieceType: 'pawn' as PieceType,
+				color: 'white',
+				position: [1, i],
+			}),
+		),
+		// Black pieces
+		{ pieceType: 'rook', color: 'black', position: [7, 0] },
+		{ pieceType: 'knight', color: 'black', position: [7, 1] },
+		{ pieceType: 'bishop', color: 'black', position: [7, 2] },
+		{ pieceType: 'queen', color: 'black', position: [7, 3] },
+		{ pieceType: 'king', color: 'black', position: [7, 4] },
+		{ pieceType: 'bishop', color: 'black', position: [7, 5] },
+		{ pieceType: 'knight', color: 'black', position: [7, 6] },
+		{ pieceType: 'rook', color: 'black', position: [7, 7] },
+		...Array.from(
+			{ length: 8 },
+			(_, i): PieceData => ({
+				pieceType: 'pawn' as PieceType,
+				color: 'black',
+				position: [6, i],
+			}),
+		),
+	]);
 
 	useEffect(() => {}, [activePosition]);
 	const handleSquareClick = (row: number, col: number) => {
+		console.log(`square: [${row}, ${col}]`);
 		setActivePosition([row, col]);
 	};
 
@@ -28,19 +71,24 @@ function Board() {
 						);
 					})}
 				</div>
-				<div className='grid grid-cols-8 z-10'>
-					<Piece
-						activePosition={activePosition}
-						pieceType={'pawn'}
-						color={'white'}
-						startPos={[0, 0]}
-					/>
-					<Piece
-						activePosition={activePosition}
-						pieceType={'king'}
-						color={'white'}
-						startPos={[0, 1]}
-					/>
+				<div className='relative w-[800px] h-[800px] z-10'>
+					{pieces.map((p, index) => (
+						<div
+							key={index}
+							className='absolute'
+							style={{
+								top: `${p.position[0] * 100}px`,
+								left: `${p.position[1] * 100}px`,
+							}}
+						>
+							<Piece
+								activePosition={activePosition}
+								pieceType={p.pieceType}
+								color={p.color}
+								position={p.position}
+							/>
+						</div>
+					))}
 				</div>
 			</div>
 		</>

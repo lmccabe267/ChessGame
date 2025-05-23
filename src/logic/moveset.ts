@@ -1,8 +1,6 @@
 export type Position = [number, number];
 
 //possible movement calc by AI to save time.
-//Some parts are pulled from a previous chess project.
-//This is the only file made with assistance for timesake
 //the return statements in these functions were made with AI assistance
 
 export function getKingMoves(pos: Position): Position[] {
@@ -68,8 +66,8 @@ export function getKnightMoves([r, c]: Position): Position[] {
 }
 
 export function getPawnMoves([r, c]: Position, color: 'white' | 'black'): Position[] {
-	const dir = color === 'white' ? -1 : 1;
-	const startRow = color === 'white' ? 6 : 1;
+	const dir = color === 'white' ? 1 : -1;
+	const startRow = color === 'white' ? 1 : 6;
 
 	const moves: Position[] = [];
 
@@ -83,7 +81,7 @@ export function getPawnMoves([r, c]: Position, color: 'white' | 'black'): Positi
 		}
 	}
 
-	// Capture diagonals (optional: check if enemy exists)
+	// Capture diagonals
 	if (c - 1 >= 0 && r + dir >= 0 && r + dir < 8) {
 		moves.push([r + dir, c - 1]);
 	}
