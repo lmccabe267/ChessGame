@@ -12,6 +12,8 @@ type PieceData = {
 
 function Board() {
 	const [activePosition, setActivePosition] = useState<Position | null>(null);
+	const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
 	const [pieces, setPieces] = useState<PieceData[]>([
 		// White pieces
 		{ pieceType: 'rook', color: 'white', position: [0, 0] },
@@ -51,27 +53,47 @@ function Board() {
 
 	useEffect(() => {}, [activePosition]);
 	const handleSquareClick = (row: number, col: number) => {
-		console.log(`square: [${row}, ${col}]`);
-		setActivePosition([row, col]);
+		const clickedPos: Position = [row, col];
+
+		if (activeIndex !== null) {
+			// Move the active piece to the clicked square
+			setPieces((prev) => {
+				const newPieces = [...prev];
+				newPieces[activeIndex] = {
+					...newPieces[activeIndex],
+					position: clickedPos,
+				};
+				return newPieces;
+			});
+			setActiveIndex(null); // Deselect after move
+		} else {
+			// Try to select a piece at the clicked square
+			const index = pieces.findIndex((p) => p.position[0] === row && p.position[1] === col);
+			if (index !== -1) {
+				setActiveIndex(index);
+			}
+		}
 	};
 
 	return (
 		<>
 			<div className='relative w-fit'>
-				<div className='absolute top-0 left-0 grid grid-cols-8 z-20 pointer-events-none'>
-					{Array.from({ length: 64 }, (_, i) => {
-						const row = Math.floor(i / 8);
-						const col = i % 8;
+				<div className='absolute top-0 left-0 grid grid-cols-9 z-20 pointer-events-none'>
+					{Array.from({ length: 72 }, (_, i) => {
+						const row = Math.floor(i / 9);
+						const col = i % 9;
 						return (
 							<div
 								key={`click-${row}-${col}`}
-								className={`${squareSize} border border-black hover:bg-blue-100 pointer-events-auto`}
+								className={`${squareSize} ${
+									col === 8 ? 'bg-red-500' : ''
+								} border border-black hover:bg-blue-100 pointer-events-auto`}
 								onClick={() => handleSquareClick(row, col)}
 							/>
 						);
 					})}
 				</div>
-				<div className='relative w-[800px] h-[800px] z-10'>
+				<div className='relative w-[900px] h-[800px] z-10'>
 					{pieces.map((p, index) => (
 						<div
 							key={index}

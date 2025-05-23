@@ -21,8 +21,6 @@ function Piece({ activePosition, pieceType, color, position }: PieceProps) {
 		}
 	});
 
-	const movePiece = (pos: Position) => {};
-
 	return (
 		<>
 			<div

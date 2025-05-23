@@ -20,3 +20,8 @@ state containing [row, col] in each piece component
 white at row 0,1
 
 black at row 6,7
+
+
+Move the active Piece state upwards
+    if piece isActive
+    pass position of next click to position
