@@ -1,0 +1,22 @@
+Chess
+8 x 8 grid
+
+32 pieces
+16 black/white
+
+Component for each piece
+    6 unique
+        pawn
+        rook
+        bishop
+        knight
+        king
+        queen
+
+logic file containing moveset for each piece
+
+state containing [row, col] in each piece component
+
+white at row 0,1
+
+black at row 6,7
